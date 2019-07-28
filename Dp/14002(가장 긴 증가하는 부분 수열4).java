@@ -16,7 +16,7 @@ public class Main {
 			len[i] = 1;
 		}
 		
-		//증가하는 수 길이  계산
+		//Lis(O(N^2))
 		int maxLen = len[0];
 		int maxIdx = 0;
 		for(int i = 1; i < N; i++) {
@@ -34,7 +34,7 @@ public class Main {
 			}	
 		}
 		
-		//숫자 찾기
+		//tracking
 		int k = 0;
 		for(int i = maxIdx; i >= 0; i--) {
 			if(len[i] == maxLen) {

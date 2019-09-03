@@ -1,102 +1,106 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.util.LinkedList;
 
-public class Main {	
-	static int N;
-	static int M;
-	static int[][] lab;
-	static int[][] tmpLab;
-	static int[] dx = {-1, 1, 0, 0};
-	static int[] dy = {0, 0, -1, 1};
-	static boolean[][] visit;
-	static int maxSafetyZone = 0;
-	static LinkedList<Pair> virusPos = new LinkedList<>();
-	
+public class Main {
+	static int[][] sudoku;
+	static int blank = 0;
+	static boolean oncePrint = false;
 	public static void main(String[] args) throws Exception {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(in.readLine());
-		N = Integer.parseInt(st.nextToken()); //세로
-		M = Integer.parseInt(st.nextToken()); //가로
-		lab = new int[N][M];
-		tmpLab = new int[N][M];
-		//입력
-		for(int i = 0; i < N; i++) {
-			st = new StringTokenizer(in.readLine());
-			for(int j = 0; j < M; j++) {
-				lab[i][j] = Integer.parseInt(st.nextToken());
-				if(lab[i][j] == 2) {
-					virusPos.add(new Pair(i, j));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		sudoku = new int[9][9];
+		
+		for(int i = 0; i < 9; i++) {
+			String[] line = br.readLine().split(" ");
+			for(int j = 0; j < 9; j++) {
+				sudoku[i][j] = Integer.parseInt(line[j]);
+				//0인 위치만 Pair로 묶어서 저장하면 탐색해야 하는 장소가 줄어듦
+				if(sudoku[i][j] == 0) blank++;
+			}
+		}	
+		
+		dfs(0, 0);		
+	}	
+	
+	public static void dfs(int k, int cnt) {
+		if(cnt == blank && !oncePrint) {
+			printSudoku();
+			oncePrint = true;
+			//프로그램을 종료하면 시간이 급격히 감소함
+            System.exit(0);
+		}
+		for(int i = k; i < 9*9; i++) {
+			int row = i / 9;
+			int col = i % 9;
+			if(sudoku[row][col] == 0) {
+				for(int num = 1; num <= 9; num++) {
+					//if(!inCol(num, col) && !inRow(num, row) && !inSquare(num, row, col)) 
+					//예외처리는 하나의 함수에 묶는것이 깔끔
+					if(isPossible(row, col, num)){
+						sudoku[row][col] = num;
+						dfs(i + 1, cnt + 1);
+						sudoku[row][col] = 0;
+					}
 				}
+				return;
 			}
+		}
+	}
+	
+	public static boolean isPossible(int x, int y, int num){
+		for(int i=0; i<9; i++){
+			if(sudoku[x][i] == num) return false;
+			if(sudoku[i][y] == num) return false;
 		}
 		
-		for(int i = 0; i < N*M; i++) {
-			setWall(i, 0);	
-		}
-		
-		System.out.println(maxSafetyZone);
-	}
-	
-	public static void setWall(int k, int wall) {
-		if(wall == 3) {			
-			copyLab();
-			visit = new boolean[N][M];
-			for(int i = 0; i < virusPos.size(); i++) {
-				spreadVirus(tmpLab, virusPos.get(i).x, virusPos.get(i).y);
-			}
-			maxSafetyZone = Math.max(maxSafetyZone, cntSafetyZone());
-			
-			return;
-		}
-		
-		//무작위 위치에 벽3개 지정(숫자를 0 ~ n*m 까지 증가시킬때 (i/m, i%m) 을 좌표로 하면 2차원 배열의 모든 인덱스를 탐색할 수 있다)
-		for(int i = k; i < N*M; i++) {
-			int x = i / M;
-			int y = i % M;
-			if(lab[x][y] == 0) {
-				lab[x][y] = 1;
-				setWall(i, wall + 1);
-				lab[x][y] = 0;
-			}			
-		}
-	}
-	
-	public static void spreadVirus(int[][] lab, int x, int y) {		
-		for(int i = 0; i < 4; i++) {
-			int dirX = dx[i] + x;
-			int dirY = dy[i] + y;
-			if(dirX >= N || dirX < 0 || dirY >= M || dirY < 0 || visit[dirX][dirY]) 
-				continue;
-			if(tmpLab[dirX][dirY] == 0) { 
-				tmpLab[dirX][dirY] = 2;
-				visit[dirX][dirY] = true;
-				spreadVirus(tmpLab, dirX, dirY);
+		int row = x/3 * 3;
+		int col = y/3 * 3;
+		for(int i = row; i < row+3; i++){
+			for(int j = col; j < col+3; j++){
+				if(sudoku[i][j] == num) return false;
 			}
 		}
+		return true;
 	}
 	
-	public static int cntSafetyZone() {
-		int cnt = 0;
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(tmpLab[i][j] == 0)
-					cnt++;
+//	public static boolean inCol(int val, int col) {
+//		for(int i = 0; i < 9; i++) {
+//			if(val == sudoku[i][col])
+//				return true;
+//		}
+//		return false;
+//	}
+//	
+//	public static boolean inRow(int val, int row) {
+//		for(int i = 0; i < 9; i++) {
+//			if(val == sudoku[row][i])
+//				return true;
+//		}
+//		return false;
+//	}
+//	
+//	public static boolean inSquare(int num, int x, int y) {
+//		int xx = x / 3;
+//		int yy = y / 3;
+//		
+//		for(int i = xx * 3; i < xx*3 + 3; i++) {
+//			for(int j = yy * 3; j < yy * 3 + 3; j++) {
+//				//System.out.println(x + " " + y);
+//				if(sudoku[i][j] == num) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+	
+	public static void printSudoku() {
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				System.out.print(sudoku[i][j] + " ");
 			}
-		}
-		return cnt;
+			System.out.println("");
+		}	
 	}
-	
-	public static void copyLab() {
-		//lab -> tmpLab
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				tmpLab[i][j] = lab[i][j];
-			}
-		}
-	}
-	
 }
 
 class Pair{

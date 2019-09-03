@@ -1,6 +1,8 @@
 import java.util.*;
 class Solution {
     public String[] solution(String[] record) {
+    	//중복허용 -> Map
+    	//for each문 사용 생활화하기
         Map<String, String> idMap = new HashMap<>();
         List<String[]> tmp = new ArrayList<>();
 

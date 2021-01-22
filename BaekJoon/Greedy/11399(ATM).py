@@ -1,3 +1,4 @@
+# 1st try
 n = input()
 times = map(int, input().split(' '))
 times = sorted(times)
@@ -10,4 +11,18 @@ for i in times:
 
 print(sum)
 
-# 1 2 3 3 4
+# 2nd try
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+time = list(map(int, input().split()))
+time.sort()
+
+total = 0
+pre_sum = 0
+for t in time:
+    total += t + pre_sum
+    pre_sum += t
+
+print(total)

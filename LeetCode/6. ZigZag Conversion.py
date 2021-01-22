@@ -47,36 +47,8 @@ class Solution(object):
         for i in range(numRows):
             for j in range(i, n, cycle):
                 strlist.append(s[j])
+                # cycle 사이에 있는 값들 추가
                 if i != numRows-1 and i != 0 and j+cycle-2*i < n:
                     strlist.append(s[j+cycle-2*i])             
         newstr = ''.join(strlist)
         return newstr
-
-# 공간복잡도 O(1)
-class Solution(object):
-    def convert(self, s, numRows):
-        if s == None:
-            return s
-        if numRows == 0:
-            return s
-        if numRows == 1:
-            return s
-        rstr = ""
-        for i in range(numRows):
-            if i == 0:
-                rstr += s[::numRows + (numRows-2)]
-            elif i == numRows-1:
-                rstr += s[i::numRows + (numRows-2)]
-            else:
-                spacea = 2*(numRows-i)
-                spaceb = 2*i
-                counter = 0
-                j = i
-                while j < len(s):
-                    rstr += s[j]
-                    if counter % 2 == 0:
-                        j+= spacea
-                    else:
-                        j+=spaceb
-                    counter +=1
-        return rstr

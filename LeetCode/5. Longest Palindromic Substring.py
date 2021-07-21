@@ -18,18 +18,9 @@ class Solution:
             j -= 1
         return True
 
-# s = "klvxwqyzugrdoaccdafdfrvxiowkcuedfhoixzipxrkzbvpusslsgfjocvidnpsnkqdfnnzzawzsslwnvvjyoignsfbxkgrokzyusxikxumrxlzzrnbtrixxfioormoyyejashrowjqqzifacecvoruwkuessttlexvdptuvodoavsjaepvrfvbdhumtuvxufzzyowiswokioyjtzzmevttheeyjqcldllxvjraeyflthntsmipaoyjixygbtbvbnnrmlwwkeikhnnmlfspjgmcxwbjyhomfjdcnogqjviggklplpznfwjydkxzjkoskvqvnxfzdrsmooyciwulvtlmvnjbbmffureoilszlonibbcwfsjzguxqrjwypwrskhrttvnqoqisdfuifqnabzbvyzgbxfvmcomneykfmycevnrcsyqclamfxskmsxreptpxqxqidvjbuduktnwwoztvkuebfdigmjqfuolqzvjincchlmbrxpqgguwuyhrdtwqkdlqidlxzqktgzktihvlwsbysjeykiwokyqaskjjngovbagspyspeghutyoeahhgynzsyaszlirmlekpboywqdliumihwnsnwjc"
-s = "cmmrracelnclsbtdmuxtfiyahrvxuwreyorosyqapfpnsntommsujibzwhgugwtvxsdsltiiyymiofbslwbwevmjrsbbssicnxptvwmsmiifypoujftxylpyvirfueagprfyyydxeiftathaygmolkcwoaavmdmjsuwoibtuqoewaexihispsshwnsurjopdwttlzyqdbkypvjsbuidsdnpgklhwfnqdvlffcysnxeywvwvblatmxbflnuykhfhjptenhcxqinomlwalvlezefqybpuepbnymzlruuirpiatqgjgcnfmrlzshauoxuoqopcikogfwpssjdeplytcapmujyvgtfmmolnuadpwblgmcaututcrwsqrlpaaqobjfnhudmsulztbdkxpfejavastxejtpbqfftdtcdhvtpbzfuqcwkxtldtjycreimiujtxudtmokcoebhodbkgkgxjzrgyuqhozqtidltodlkziyofdeszwiobkwesdijxbbagguxvofvtphqxgvidqfkljufgubjmjllxoanbizwtedykwmneaosopynzlzvrlqcmyaahdcagfatlhwtgqxsyxwjhexfiplwtrtydjzrsysrcwszlntwrpgfedhgjzhztffqnjotlfudvczwfkhuwmdzcqgrmfttwaxocohtuscdxwfvhcymjpkqexusdaccw"
-import time
-t = time.time()
-a = Solution()
-res = a.longestPalindrome(s)
-print(res)
-print(time.time()-t)
-
 # best solution
 class Solution:
-    def longestPalindrome(self, s: str) -> str:
+    def longestPalindrome(self, s):
         def expand(left, right):
             while left >= 0 and right < len(s) and s[left] == s[right]:
                 left -= 1
@@ -42,14 +33,28 @@ class Solution:
         result = ''
         for i in range(len(s)-1):
             result = max(result, 
-                        expand(i,i),
+                        expand(i-1,i+1),
                         expand(i, i+1),
                         key=len)
 
         return result
 
-t = time.time()
-a = Solution()
-res = a.longestPalindrome(s)
-print(res)
-print(time.time()-t)
+# another solution(dp)
+# example s = 'babad' -- > dp[2][3] = s[2:3] = ba
+class Solution:
+    def longestPalindrome(self, s): 
+        ans_l = ans_r = 0
+        dp = [[False]*len(s) for _ in range(len(s))]
+        
+        for i in range(len(s)):
+            dp[i][i] = True
+            longest_palindrom = s[i]
+
+        for i in range(len(s)-2,-1,-1):
+            for j in range(i+1,len(s)):
+                if s[i] == s[j] and (j-i == 1 or dp[i+1][j-1]):
+                    dp[i][j] = True
+                    if ans_r-ans_l < j-i:
+                        ans_l, ans_r = i, j
+
+        return s[ans_l:ans_r+1]

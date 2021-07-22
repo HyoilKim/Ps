@@ -33,17 +33,46 @@ class Solution:
 # priority queue
 # time-complexity: O(nlogk) / 156ms
 # space-complexity: O(n)
-class Solution(object):
+from collections import heapq
+class Solution:
     def mergeKLists(self, lists):
-        q = PriorityQueue()
-        for l in lists:
-            while l:
-                q.put(l.val)
-                l = l.next
-        
-        head = point = ListNode(0)
-        while not q.empty():
-            point.next = ListNode(q.get())
-            point = point.next
+        ListNode.__eq__ = lambda self, other: self.val == other.val
+        ListNode.__lt__ = lambda self, other: self.val < other.val
+        h = []
+        head = tail = ListNode(0)
+        for i in lists:
+            if i:
+                heapq.heappush(h, (i.val, i))
+
+        while h:
+            node = heapq.heappop(h)[1]
+            tail.next = node
+            tail = tail.next
+            if node.next:
+                heapq.heappush(h, (node.next.val, node.next))
+
         return head.next
 
+# divede and conquer
+class Solution(object):
+    def mergeKLists(self, lists):
+        if not lists:
+            return None
+        if len(lists) == 1:
+            return lists[0]
+        mid = len(lists) // 2
+        l, r = self.mergeKLists(lists[:mid]), self.mergeKLists(lists[mid:])
+        return self.merge(l, r)
+    
+    def merge(self, l, r):
+        dummy = p = ListNode()
+        while l and r:
+            if l.val < r.val:
+                p.next = l
+                l = l.next
+            else:
+                p.next = r
+                r = r.next
+            p = p.next
+        p.next = l or r
+        return dummy.next

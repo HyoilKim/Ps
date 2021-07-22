@@ -1,4 +1,6 @@
 # 136ms
+# time - O(2^2N*N)
+# space - O(N)
 class Solution:
     def generateParenthesis(self, n: int):
         def generate(i, strs):
@@ -25,9 +27,10 @@ class Solution:
         return result
 
 # 44ms
+# time - O(2^2N/sqrt(N))
+# space - O(N)
 class Solution:
     def generateParenthesis(self, n: int):
-        result = []
         def backtracking(i, strs, stack):
             if i == 2*n:
                 if len(stack) == 0:
@@ -37,23 +40,27 @@ class Solution:
             backtracking(i+1, strs+"(", stack+['('])
             if len(stack) > 0 and stack[-1] == '(':
                 stack.pop()
-                dfs(i+1, strs+")", stack)
-
+                backtracking(i+1, strs+")", stack)
+        
+        result = []
         backtracking(0, "", [])
         return result
 
 # best solution(36ms)
-class Solution(object):
-    def generateParenthesis(self, N):
-        ans = []
-        def backtrack(S = '', left = 0, right = 0):
-            if len(S) == 2 * N:
-                ans.append(S)
+class Solution:
+    def generateParenthesis(self, n):
+        def backtrack(S = [], left = 0, right = 0):
+            if len(S) == 2*n:
+                ans.append("".join(S))
                 return
-            if left < N:
-                backtrack(S+'(', left+1, right)
+            if left < n:
+                S.append("(")
+                backtrack(S, left+1, right)
+                S.pop()
             if right < left:
-                backtrack(S+')', left, right+1)
-
+                S.append(")")
+                backtrack(S, left, right+1)
+                S.pop()
+        ans = []
         backtrack()
         return ans

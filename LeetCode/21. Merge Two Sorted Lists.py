@@ -1,10 +1,11 @@
 # Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
 class Solution:
-    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode):
         head = cur = ListNode(0)
         while l1 and l2:
             if l1.val > l2.val:
@@ -14,14 +15,7 @@ class Solution:
                 cur.next = l1
                 l1 = l1.next
             cur = cur.next
-            
-        # 가독성 높은 코드    
-        # prev.next = l1 or l2
-        if l1:
-            prev.next = l1
-        if l2:
-            prev.next = l2
-
+        cur.next = l1 or l2
         return head.next
 
 # best solution1(if both lists are non-empty)
@@ -32,6 +26,7 @@ class Solution:
                 a, b = b, a
             a.next = self.mergeTwoLists(a.next, b)
         return a or b
+
 # best solution2
 def mergeTwoLists(self, a, b):
     if not a or b and a.val > b.val:

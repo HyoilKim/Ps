@@ -1,11 +1,12 @@
+# time - O(n^2)
 class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
+    def threeSum(self, nums):
         nums.sort()
         result = []
         for i in range(len(nums)-2):
             if i > 0 and nums[i] == nums[i-1]: # 중복 방지
                 continue 
-            if nums[i] > 0:
+            if nums[i] > 0: # 정렬했기 때문에 num[l], num[r] 모두 양수
                 break
             l = i+1
             r = len(nums)-1 

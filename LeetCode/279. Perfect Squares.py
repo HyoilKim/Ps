@@ -1,5 +1,5 @@
 # bfs solution
-# time - O(N) (branch: sqrt(N), depth: sqrt(N))
+# time - O(N*sqrt(N)) (branch: sqrt(N), depth: N)
 from collections import deque
 import math
 class Solution:

@@ -47,3 +47,27 @@ def solution(n, s, a, b, fares):
     for i in range(n):
         minv = min(minv, d[s-1][i]+d[i][a-1]+d[i][b-1])
     return minv
+
+# second try
+from collections import defaultdict
+from heapq import heappush, heappop
+def solution(n, s, a, b, fares):
+    graph = defaultdict(lambda: defaultdict(int))
+    for n1,n2,w in fares:
+        graph[n1][n2] = graph[n2][n1] = w
+    
+    dp = [[float('inf')]*(n+1) for _ in range(n+1)]
+    for i in range(1, n+1):
+        pq = [(i,0)]
+        dp[i][i] = 0
+        while pq:
+            cur, d = heappop(pq)
+            for nxt in graph[cur]:
+                if d+graph[cur][nxt] <= dp[i][nxt]:
+                    dp[i][nxt] = d+graph[cur][nxt]
+                    heappush(pq, (nxt,dp[i][nxt]))
+        
+    result = float('inf')
+    for i in range(1, n+1):
+        result = min(result, dp[s][i]+dp[i][a]+dp[i][b])
+    return result

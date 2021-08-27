@@ -9,7 +9,7 @@ def solution(info, query):
     for _info in info:
         data, score = _info[:-1], int(_info[-1])
         for i in range(5):
-            for comb in combinations([0,1,2,3], i):
+            for j in combinations([0,1,2,3], i):
                 _data = data[:]
                 for k in j:
                     _data[k] = '-'
@@ -29,3 +29,5 @@ def solution(info, query):
             answer.append(0)
     
     return answer
+
+# second try fail

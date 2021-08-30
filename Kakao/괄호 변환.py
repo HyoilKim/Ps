@@ -31,4 +31,5 @@ def solution(p):
         for c in u[1:-1]:
             s += ')' if c == '(' else '('
         return s
-        
+
+# second try fail

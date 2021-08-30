@@ -16,3 +16,5 @@ def solution(s):
                 length += len(token)
         min_len = min(min_len, length)
     return min_len
+
+# second try fail

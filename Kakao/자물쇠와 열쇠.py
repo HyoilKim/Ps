@@ -39,3 +39,5 @@ def solution(key, lock):
     return False
 
 # Refer: https://johnyejin.tistory.com/127
+
+# second try fail

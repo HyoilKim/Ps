@@ -71,3 +71,30 @@ class Solution {
 
     }
 }
+
+# second try fail
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        s = s.strip()
+        if not s: return 0
+        
+        result = ''
+        si = 0
+        if s[0] in '+-':
+            result += s[0]
+            si = 1
+            
+        for i in range(si, len(s)):
+            if s[i].isdigit():
+                result += s[i]
+            else:
+                break
+                
+        if len(result) == 1 and result[0] in '+-': return 0
+        if result == '': return 0
+        
+        result = int(result)
+        if result == '': return 0
+        if result >= 2**31-1: return 2**31-1
+        if result < -(2**31): return -(2**31)
+        return result

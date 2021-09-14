@@ -29,3 +29,31 @@ class Solution:
 #         return (int)res;
 #     }
 # }
+
+# second try
+class Solution:
+    def reverse(self, x: int) -> int:
+        x = str(x)
+        if x[0] == '-':
+            x = int('-'+x[1:][::-1])
+        else:
+            x = int(x[::-1])
+        
+        return 0 if x >= 2**31-1 or x <= -(2**31) else x
+
+# doen't use [::-1] 
+class Solution:
+    def reverse(self, x):
+        result = 0
+
+        if x < 0:
+            symbol = -1
+            x = -x
+        else:
+            symbol = 1
+
+        while x:
+            result = result * 10 + x % 10
+            x //= 10
+            
+        return 0 if result > pow(2, 31) else result * symbol

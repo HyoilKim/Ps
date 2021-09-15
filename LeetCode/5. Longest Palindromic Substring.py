@@ -58,3 +58,19 @@ class Solution:
                         ans_l, ans_r = i, j
 
         return s[ans_l:ans_r+1]
+
+# second try fail
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def expand(l, r):
+            while l >= 0 and r < len(s):
+                if s[l] != s[r]:
+                    break
+                l, r = l-1, r+1
+            return s[l+1:r]
+        
+        result = ''
+        for i in range(len(s)):
+            result = max(result, expand(i-1, i+1), expand(i, i+1), key=len)
+        return result
+            

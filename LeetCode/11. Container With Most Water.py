@@ -19,3 +19,18 @@ class Solution:
             else:
                 j -= 1
         return water
+
+# second try success
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height)-1
+        result = 0
+        while l < r:
+            h = min(height[l], height[r])
+            result = max(result, h*(r-l))
+            if height[l] < height[r]:
+                l += 1
+            else:
+                r -= 1
+        return result
+            

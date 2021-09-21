@@ -24,3 +24,25 @@ class Solution:
                 else:
                     r -= 1
         return result
+
+# second try success
+class Solution:
+    def threeSum(self, nums):
+        if len(nums) <= 2: return []
+        nums.sort()
+        
+        result = set()
+        for i, n in enumerate(nums):
+            l, r = i+1, len(nums)-1
+            while l < r:
+                if nums[l]+nums[r] == -n:
+                    result.add((n,nums[l],nums[r]))
+                    l += 1
+                    r -= 1
+                elif nums[l]+nums[r] < -n:
+                    l += 1
+                else:
+                    r -= 1
+        return list(result)
+                    
+        

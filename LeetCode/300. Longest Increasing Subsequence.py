@@ -24,4 +24,16 @@ class Solution:
             else:
                 dp[idx] = n
         return len(dp)    
-        
+
+# second try
+import bisect
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        sub = []
+        for n in nums:
+            idx = bisect.bisect_left(sub, n)
+            if len(sub) == idx:
+                sub.append(n)
+            else:
+                sub[idx] = n
+        return len(sub)

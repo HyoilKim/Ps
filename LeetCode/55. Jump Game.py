@@ -5,7 +5,7 @@ class Solution:
         for i in range(len(nums))[::-1]:
             if i + nums[i] >= goal:
                 goal = i
-        return not goal
+        return goal == 0
 
 # my solution, O(n)
 class Solution:
